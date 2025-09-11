@@ -17,8 +17,8 @@ pipeline {
 
         stage('Lancement de la Stack Docker-Compose') {
             steps {
-                sh 'docker compose -f Docker-compose.yml down || true'
-                sh 'docker compose -f Docker-compose.yml up -d'
+                sh 'docker compose -f docker-compose.yml down || true'
+                sh 'docker compose -f docker-compose.yml up -d'
             }
         }
 
