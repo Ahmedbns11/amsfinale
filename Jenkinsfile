@@ -1,6 +1,12 @@
 pipeline {
     agent any
 
+    tools {
+        // Configure Maven tool (must be configured in Jenkins Global Tool Configuration)
+        maven 'Maven-3.9' // Replace with your Maven installation name in Jenkins
+        jdk 'JDK-21'      // Replace with your JDK installation name in Jenkins
+    }
+
     environment {
         IMAGE_NAME = "ahmedbns23/ams"
         IMAGE_TAG = "v1.${BUILD_NUMBER}"
@@ -31,7 +37,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-cred',
                                                  usernameVariable: 'DOCKER_USER',
                                                  passwordVariable: 'DOCKER_PASS')]) {
-                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                    sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin"
                     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
@@ -51,6 +57,9 @@ pipeline {
         }
         failure {
             echo '❌ Erreur dans le pipeline !'
+        }
+        always {
+            cleanWs()
         }
     }
 }
