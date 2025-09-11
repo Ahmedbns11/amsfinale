@@ -7,18 +7,16 @@ pipeline {
     }
 
     stages {
-        stage('Checkout to the branch') {
+        stage('Checkout') {
             steps {
-                // Assurez-vous que credentialsId correspond à ton credential GitHub
-                git(branch: 'master',
-                    url: 'https://github.com/Ahmedbns11/amsfinale.git',
-                    credentialsId: 'github-cred')
+                git branch: 'master',
+                    url: 'https://github.com/Ahmedbns11/amsfinale.git'
             }
         }
 
         stage('Build JAR') {
             steps {
-                sh 'mvn clean package'
+                sh 'mvn clean package -DskipTests'
             }
         }
 
@@ -33,7 +31,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-cred',
                                                  usernameVariable: 'DOCKER_USER',
                                                  passwordVariable: 'DOCKER_PASS')]) {
-                    sh 'echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin'
+                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
                     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
@@ -42,7 +40,7 @@ pipeline {
         stage('Deploy with Docker Compose') {
             steps {
                 sh 'docker compose down || true'
-                sh "IMAGE_TAG=${IMAGE_TAG} IMAGE_NAME=${IMAGE_NAME} docker compose up -d --build"
+                sh "IMAGE_TAG=${IMAGE_TAG} docker compose up -d --build"
             }
         }
     }
@@ -53,9 +51,6 @@ pipeline {
         }
         failure {
             echo '❌ Erreur dans le pipeline !'
-        }
-        always {
-            cleanWs()
         }
     }
 }
