@@ -17,7 +17,6 @@ pipeline {
         stage('Build JAR') {
             steps {
                 sh 'mvn clean package'
-'
             }
         }
 
@@ -32,7 +31,7 @@ pipeline {
                 withCredentials([usernamePassword(credentialsId: 'dockerhub-cred',
                                                  usernameVariable: 'DOCKER_USER',
                                                  passwordVariable: 'DOCKER_PASS')]) {
-                    sh "echo $DOCKER_PASS | docker login -u $DOCKER_USER --password-stdin"
+                    sh "echo \$DOCKER_PASS | docker login -u \$DOCKER_USER --password-stdin"
                     sh "docker push ${IMAGE_NAME}:${IMAGE_TAG}"
                 }
             }
@@ -52,6 +51,10 @@ pipeline {
         }
         failure {
             echo '❌ Erreur dans le pipeline !'
+        }
+        always {
+            // Clean up workspace
+            cleanWs()
         }
     }
 }
