@@ -1,12 +1,6 @@
 pipeline {
     agent any
 
-    tools {
-        // Configure Maven tool (must be configured in Jenkins Global Tool Configuration)
-        maven 'Maven-3.9' // Replace with your Maven installation name in Jenkins
-        jdk 'JDK-21'      // Replace with your JDK installation name in Jenkins
-    }
-
     environment {
         IMAGE_NAME = "ahmedbns23/ams"
         IMAGE_TAG = "v1.${BUILD_NUMBER}"
