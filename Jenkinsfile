@@ -7,7 +7,7 @@ pipeline {
     }
 
     stages {
-        stage('Checkout') {
+        stage('Checkout to the branch') {
             steps {
                 git branch: 'master',
                     url: 'https://github.com/Ahmedbns11/amsfinale.git'
