@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = credentials('dockerhub_ahmedbns23')
+        DOCKERHUB_CREDENTIALS = credentials('docker-cred')
         IMAGE_NAME = "ahmedbns23/ams"
         IMAGE_TAG = "v1.${BUILD_NUMBER}"
     }
