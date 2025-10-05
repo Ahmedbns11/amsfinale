@@ -1,0 +1,8 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: app-config
+data:
+  MYSQL_DATABASE: "amsdb"
+  MYSQL_USER: "amsuser"
+  SPRING_DATASOURCE_URL: "jdbc:mysql://mysql-service:3306/amsdb"
